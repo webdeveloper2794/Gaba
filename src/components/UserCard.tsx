@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type { User } from "../types/user";
 
 interface UserCardProps {
@@ -6,26 +7,29 @@ interface UserCardProps {
 
 const getCompanyName = (company: User["company"]): string => {
   if (!company) return "";
-  if (typeof company === "string") return company;
-  if (typeof company === "object" && company.name) return company.name;
-  return "";
+  return company.name ?? "";
 };
 
 export const UserCard = ({ user }: UserCardProps) => {
   const companyName = getCompanyName(user.company);
+  const [imgError, setImgError] = useState(false);
+  const initials = `${user.firstName[0]}${user.lastName[0]}`.toUpperCase();
 
   return (
     <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 overflow-hidden">
-      <div className="aspect-square overflow-hidden bg-gray-100">
-        <img
-          src={user.image}
-          alt={`${user.firstName} ${user.lastName}`}
-          className="w-full h-full object-cover"
-          onError={(e) => {
-            (e.target as HTMLImageElement).src =
-              "https://via.placeholder.com/150?text=No+Image";
-          }}
-        />
+      <div className="aspect-square overflow-hidden bg-zinc-100 flex items-center justify-center">
+        {imgError ? (
+          <span className="text-4xl font-semibold text-zinc-400 select-none">
+            {initials}
+          </span>
+        ) : (
+          <img
+            src={user.image}
+            alt={`${user.firstName} ${user.lastName}`}
+            className="w-full h-full object-cover"
+            onError={() => setImgError(true)}
+          />
+        )}
       </div>
       <div className="p-4">
         <h3 className="text-lg font-semibold text-gray-900">

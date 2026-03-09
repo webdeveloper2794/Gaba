@@ -39,7 +39,12 @@ export const UsersPage = () => {
   }, []);
 
   const usersQuery = useUsers(ITEMS_PER_PAGE, skip, !isSearching);
-  const searchQuery = useSearchUsers(debouncedSearch, isSearching);
+  const searchQuery = useSearchUsers(
+    debouncedSearch,
+    isSearching,
+    ITEMS_PER_PAGE,
+    skip,
+  );
 
   const activeQuery = isSearching ? searchQuery : usersQuery;
   const { data, isLoading, isFetching, error } = activeQuery;

@@ -11,10 +11,15 @@ export const useUsers = (limit: number, skip: number, enabled = true) =>
     gcTime: 1000 * 60 * 10,
   });
 
-export const useSearchUsers = (query: string, enabled = true) =>
+export const useSearchUsers = (
+  query: string,
+  enabled = true,
+  limit?: number,
+  skip?: number,
+) =>
   useQuery<UserResponse>({
-    queryKey: ["searchUsers", query],
-    queryFn: ({ signal }) => api.searchUsers({ q: query }, signal),
+    queryKey: ["searchUsers", query, limit, skip],
+    queryFn: ({ signal }) => api.searchUsers({ q: query, limit, skip }, signal),
     enabled: enabled && query.length > 0,
     staleTime: 1000 * 60 * 5,
     gcTime: 1000 * 60 * 10,
